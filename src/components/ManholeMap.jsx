@@ -18,7 +18,14 @@ function Enquadrar({ itens, selecionadoId }) {
   return null
 }
 
+<<<<<<< HEAD
 export default function ManholeMap({ itens, selecionadoId, onSelect }) {
+=======
+const coordValida = ({ b }) => Math.abs(b.lat) <= 90 && Math.abs(b.lng) <= 180
+
+export default function ManholeMap({ itens: todos, selecionadoId, onSelect }) {
+  const itens = todos.filter(coordValida)
+>>>>>>> bfba7e9 (Fazendo a API)
   return (
     <section className="card overflow-hidden" aria-labelledby="t-mapa">
       <div className="p-4 pb-2">

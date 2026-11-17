@@ -8,7 +8,11 @@ export default function Header({ modoDemo, onNovo, onRecarregar, ocupado }) {
             <path d="M9 14h6M10 17h4" />
           </svg>
           <div>
+<<<<<<< HEAD
             <h1 className="text-2xl font-extrabold leading-tight">UrbanSense</h1>
+=======
+            <h1 className="text-2xl font-extrabold leading-tight">DrenaAlerta</h1>
+>>>>>>> bfba7e9 (Fazendo a API)
             <p className="text-sm text-sky-200">Veja o bueiro entupindo antes da água subir na rua</p>
           </div>
         </div>

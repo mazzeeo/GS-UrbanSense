@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 
 const KEY = 'urbansense:bueiros'
+=======
+// Armazenamento local usado SOMENTE no modo demonstração (sem VITE_API_URL).
+// Tem a mesma interface da API externa para o resto do app não perceber a diferença.
+const KEY = 'drenaalerta:bueiros'
+>>>>>>> bfba7e9 (Fazendo a API)
 const ler = () => { try { return JSON.parse(localStorage.getItem(KEY) || '[]') } catch { return [] } }
 const gravar = (v) => localStorage.setItem(KEY, JSON.stringify(v))
 
