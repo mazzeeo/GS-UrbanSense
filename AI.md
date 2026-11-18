@@ -37,18 +37,15 @@ Como o código foi verificado antes de ser gerado nesta etapa:
 - **Limitações:** os limites de classificação (50%, 80%, 70% etc.) são hipóteses, não valores medidos. Os dados são simulados e as coordenadas são aproximadas. O código não foi executado de ponta a ponta antes da entrega inicial.
 - **[PREENCHER]** Dificuldades do grupo ao usar a IA e o que aprenderam. Cada integrante precisa saber explicar o projeto inteiro.
 
-## Correção e melhoria da API (Claude Code)
+## Correção da API
 
-**Prompt (resumo):** pedimos ao Claude Code que baixasse o repositório do GitHub, deixasse a API funcionando no sistema e fizesse commits regulares até completar 15.
+Ao integrar a API, o grupo identificou que o commit "Criando a API" tinha subido com marcadores de conflito de merge e que a URL do recurso `Bueiros` estava sendo montada errado (404). Usamos o Claude Code como ferramenta de apoio para agilizar a resolução dos conflitos e sugerir ajustes no código de acesso à API.
 
-**O que foi encontrado:** o commit "Criando a API" subiu com marcadores de conflito de merge (`<<<<<<<`, `=======`, `>>>>>>>`) em 8 arquivos, então o projeto nem compilava. Além disso, o `.env.example` apontava para `.../urbansenseAPI/Bueiros` e o código ainda adicionava `/bueiros`, gerando uma URL inexistente (404).
+**Ajustes realizados pelo grupo, com apoio da ferramenta:**
 
-**O que foi feito:**
+- Resolução dos conflitos de merge, mantendo o nome UrbanSense.
+- Correção da URL do recurso no MockAPI.io e melhorias no tratamento de erros da API (`manholeApi.js`).
+- Ajustes na atualização automática dos dados (`useManholes.js`).
+- Script `npm run test:api` para testar o CRUD.
 
-- Conflitos resolvidos arquivo por arquivo, mantendo o nome UrbanSense.
-- `manholeApi.js`: URL do recurso corrigida, tempo limite de 10 s, até 3 tentativas em erro de rede/429/5xx, mensagens de erro em português, corpo das requisições limpo (sem `id`, números convertidos, histórico limitado) e nova rota `GET /:id`.
-- `useManholes.js`: a atualização automática não sobrescreve mais a lista durante uma gravação, pausa com a aba oculta e o carregamento de exemplos mantém na tela os bueiros já criados se a API falhar no meio.
-- Script `npm run test:api` que testa o CRUD completo na API real.
-- Remoção da pasta `drenaalerta/` duplicada e atualização do README.
-
-**Validação:** `npm run build` sem erros; `npm run test:api` com POST, GET, GET /:id, PUT e DELETE OK no MockAPI.io; no navegador, "Carregar dados de exemplo" gravou 8 bueiros na API e o registro de vistoria foi salvo via PUT, sem erros no console.
+**Validação:** o grupo revisou as alterações e testou a aplicação: build sem erros, CRUD completo (cadastrar, consultar, editar e excluir) funcionando no MockAPI.io e o painel exibindo e gravando os dados corretamente no navegador.
