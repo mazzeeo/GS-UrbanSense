@@ -21,20 +21,44 @@ const normalizar = (b) => ({
   manutencoes: Array.isArray(b.manutencoes) ? b.manutencoes : [],
 })
 
+const TIMEOUT_MS = 10000
+const TENTATIVAS = 3
+const esperar = (ms) => new Promise((r) => setTimeout(r, ms))
+
+// Erros temporários (limite de requisições ou servidor fora do ar) valem nova tentativa.
+const temporario = (status) => status === 429 || status >= 500
+
+const DICAS = {
+  400: 'Pedido recusado pela API (400). Confira se o bueiro tem um id válido.',
+  401: 'Chave da API ausente ou inválida (401). Confira VITE_API_KEY.',
+  403: 'A API recusou a operação (403). No plano gratuito há limite de registros; exclua bueiros antigos.',
+  404: 'Bueiro ou recurso não encontrado na API (404). Confira VITE_API_URL ou atualize a lista.',
+  429: 'Muitas requisições seguidas para a API (429). Aguarde alguns segundos e tente de novo.',
+}
+
 async function http(caminho, opcoes = {}) {
-  const res = await fetch(`${RECURSO}${caminho}`, {
-    headers: { 'Content-Type': 'application/json', ...(KEY ? { 'x-api-key': KEY } : {}) },
-    ...opcoes,
-  })
-  if (!res.ok) {
-    const dicas = {
-      400: 'Pedido recusado pela API (400). Confira se o bueiro tem um id válido.',
-      401: 'Chave da API ausente ou inválida (401). Confira VITE_API_KEY.',
-      403: 'A API recusou a operação (403). No plano gratuito há limite de registros; exclua bueiros antigos.',
+  for (let tentativa = 1; ; tentativa++) {
+    const ctrl = new AbortController()
+    const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS)
+    let res
+    try {
+      res = await fetch(`${RECURSO}${caminho}`, {
+        headers: { 'Content-Type': 'application/json', ...(KEY ? { 'x-api-key': KEY } : {}) },
+        signal: ctrl.signal,
+        ...opcoes,
+      })
+    } catch (e) {
+      if (tentativa < TENTATIVAS) { await esperar(500 * tentativa); continue }
+      throw new Error(e.name === 'AbortError'
+        ? 'A API demorou demais para responder. Confira sua conexão e tente de novo.'
+        : 'Não foi possível conectar à API. Confira sua conexão e a VITE_API_URL.')
+    } finally {
+      clearTimeout(timer)
     }
-    throw new Error(dicas[res.status] || `A API respondeu com erro ${res.status}. Tente de novo em instantes.`)
+    if (res.ok) return res.status === 204 ? null : res.json()
+    if (temporario(res.status) && tentativa < TENTATIVAS) { await esperar(800 * tentativa); continue }
+    throw new Error(DICAS[res.status] || `A API respondeu com erro ${res.status}. Tente de novo em instantes.`)
   }
-  return res.status === 204 ? null : res.json()
 }
 
 const remota = {
