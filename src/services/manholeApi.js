@@ -21,6 +21,19 @@ const normalizar = (b) => ({
   manutencoes: Array.isArray(b.manutencoes) ? b.manutencoes : [],
 })
 
+// Monta o corpo enviado à API: sem o id (ele vai na URL), números como números
+// e histórico limitado para o registro não crescer sem fim no MockAPI.
+const MAX_LEITURAS = 96
+const MAX_MANUTENCOES = 50
+const preparar = ({ id, _id, uuid, createdAt, ...b }) => ({
+  ...b,
+  lat: Number(b.lat),
+  lng: Number(b.lng),
+  profundidade: Number(b.profundidade),
+  leituras: (Array.isArray(b.leituras) ? b.leituras : []).slice(-MAX_LEITURAS),
+  manutencoes: (Array.isArray(b.manutencoes) ? b.manutencoes : []).slice(-MAX_MANUTENCOES),
+})
+
 const TIMEOUT_MS = 10000
 const TENTATIVAS = 3
 const esperar = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -66,9 +79,11 @@ const remota = {
     const dados = await http('')
     return Array.isArray(dados) ? dados.map(normalizar) : []
   },
-  create: async (dados) => normalizar(await http('', { method: 'POST', body: JSON.stringify(dados) })),
-  update: async (id, dados) => normalizar(await http(`/${id}`, { method: 'PUT', body: JSON.stringify(dados) })),
-  remove: (id) => http(`/${id}`, { method: 'DELETE' }),
+  get: async (id) => normalizar(await http(`/${encodeURIComponent(id)}`)),
+  create: async (dados) => normalizar(await http('', { method: 'POST', body: JSON.stringify(preparar(dados)) })),
+  update: async (id, dados) =>
+    normalizar(await http(`/${encodeURIComponent(id)}`, { method: 'PUT', body: JSON.stringify(preparar(dados)) })),
+  remove: (id) => http(`/${encodeURIComponent(id)}`, { method: 'DELETE' }),
 }
 
 export const manholeApi = modoDemo ? localApi : remota

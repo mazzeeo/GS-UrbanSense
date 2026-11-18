@@ -6,6 +6,7 @@ const gravar = (v) => localStorage.setItem(KEY, JSON.stringify(v))
 
 export const localApi = {
   async list() { return ler() },
+  async get(id) { return ler().find((x) => x.id === id) || null },
   async create(dados) {
     const item = { ...dados, id: crypto.randomUUID() }
     gravar([...ler(), item])
