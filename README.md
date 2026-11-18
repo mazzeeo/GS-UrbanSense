@@ -10,7 +10,8 @@
 | Problema, em uma frase | Bueiros entupidos só são percebidos quando a água já está na rua, tarde demais para evitar o alagamento |
 | Como funciona | Sensores medem nível e fluxo de água em cada bueiro; o sistema classifica em Normal, Atenção ou Crítico e avisa qual precisa de inspeção |
 | O que cada parte faz | Python: regras e menu · Matemática: modelo de taxa de subida do nível · Sensor (ESP32/Wokwi): mede nível e fluxo · **Front-end/Web: painel (este repositório)** · Experiência: requisitos e protótipo · Pitch: vídeo |
-| Link do repositório | _(colar o link do GitHub privado)_ |
+| Link do repositório | https://github.com/mazzeeo/GS-UrbanSense |
+| Link do deploy (Vercel) | https://gs-urbansense.vercel.app |
 | Indicador de impacto | Tempo entre o primeiro sinal de risco e a vistoria; nº de bueiros vistoriados antes de transbordar |
 | ODS conectados | 11, 13 e 9 (detalhes abaixo) |
 
@@ -90,6 +91,11 @@ Para testar a API sem abrir o site: `npm run test:api` (cria, lê, edita e exclu
 
 > O ESP32 (Wokwi) pode enviar leituras com `PUT /Bueiros/:id`, no formato `{ t, nivel, entrada, saida }` dentro de `leituras`. O painel atualiza a cada 15 segundos.
 
+## Links
+
+- **Site publicado (Vercel):** https://gs-urbansense.vercel.app
+- **Repositório no GitHub:** https://github.com/mazzeeo/GS-UrbanSense
+
 ## Deploy (Vercel ou Netlify)
 
 1. Suba o repositório no GitHub.
@@ -130,4 +136,9 @@ src/
 
 ## Equipe
 
-_(nome completo e RM de cada integrante)_
+| Nome | RM |
+|---|---|
+| Eduardo Arruda | 573313 |
+| Lucas Mazzeo | 570668 |
+| Henry Ferreira | 571544 |
+| Renan Oliveira | 571837 |
