@@ -56,6 +56,9 @@ try {
   const depois = await chamar('GET')
   ok(!depois.some((b) => b.id === novo.id), 'DELETE /:id remove o bueiro')
 
+  const inexistente = await fetch(`${RECURSO}/${novo.id}`, { headers })
+  ok(inexistente.status === 404, 'GET /:id de bueiro excluído responde 404')
+
   console.log('API funcionando: CRUD completo OK.')
 } catch (e) {
   console.error(`  ERRO ${e.message}`)
