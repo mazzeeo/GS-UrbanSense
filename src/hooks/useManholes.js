@@ -11,6 +11,7 @@ export function useManholes() {
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
+  const [ultimaSync, setUltimaSync] = useState(null)
   // Enquanto uma gravação está em andamento, a atualização automática espera,
   // para não sobrescrever a lista com dados antigos.
   const gravando = useRef(0)
@@ -22,6 +23,7 @@ export function useManholes() {
       const dados = await manholeApi.list()
       if (silencioso && gravando.current > 0) return
       setItems(Array.isArray(dados) ? dados : [])
+      setUltimaSync(new Date())
       setError(null)
     } catch (e) {
       setError(e.message)
@@ -90,5 +92,5 @@ export function useManholes() {
       return true
     })
 
-  return { items, loading, busy, error, recarregar: () => carregar(), criar, atualizar, remover, carregarExemplos }
+  return { items, loading, busy, error, ultimaSync, recarregar: () => carregar(), criar, atualizar, remover, carregarExemplos }
 }
