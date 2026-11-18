@@ -1,4 +1,6 @@
-export default function Header({ modoDemo, onNovo, onRecarregar, ocupado }) {
+const fmtSync = (d) => d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+
+export default function Header({ modoDemo, onNovo, onRecarregar, ocupado, ultimaSync }) {
   return (
     <header className="bg-ink text-white">
       <div className="mx-auto max-w-7xl px-4 py-4 flex flex-wrap items-center justify-between gap-3">
@@ -10,6 +12,9 @@ export default function Header({ modoDemo, onNovo, onRecarregar, ocupado }) {
           <div>
             <h1 className="text-2xl font-extrabold leading-tight">UrbanSense</h1>
             <p className="text-sm text-sky-200">Veja o bueiro entupindo antes da água subir na rua</p>
+            {!modoDemo && ultimaSync && (
+              <p className="text-xs text-sky-300" aria-live="polite">Sincronizado com a API às {fmtSync(ultimaSync)}</p>
+            )}
           </div>
         </div>
         <div className="flex gap-2">

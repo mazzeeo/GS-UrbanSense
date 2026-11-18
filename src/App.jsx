@@ -14,7 +14,7 @@ import { useSensorSimulator } from './hooks/useSensorSimulator'
 import { modoDemo } from './services/manholeApi'
 
 export default function App() {
-  const { items, loading, busy, error, recarregar, criar, atualizar, remover, carregarExemplos } = useManholes()
+  const { items, loading, busy, error, ultimaSync, recarregar, criar, atualizar, remover, carregarExemplos } = useManholes()
   const { todos, filtrados, alertas, contagem, busca, setBusca, status, setStatus } = useFilters(items)
   const { simular, aviso: avisoSensor } = useSensorSimulator(atualizar)
 
@@ -60,7 +60,7 @@ export default function App() {
   return (
     <>
       <a href="#conteudo" className="sr-only focus:not-sr-only focus:absolute focus:z-[3000] focus:bg-white focus:p-3">Pular para o conteúdo</a>
-      <Header modoDemo={modoDemo} ocupado={busy} onNovo={() => setForm({})} onRecarregar={recarregar} />
+      <Header modoDemo={modoDemo} ocupado={busy} ultimaSync={ultimaSync} onNovo={() => setForm({})} onRecarregar={recarregar} />
 
       <main id="conteudo" className="mx-auto max-w-7xl px-4 py-5 space-y-4">
         <div aria-live="polite" className="min-h-[1.5rem] text-sm font-semibold text-brand-dark">{aviso || avisoSensor}</div>
